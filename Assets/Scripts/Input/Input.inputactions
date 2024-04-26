@@ -1,0 +1,46 @@
+{
+    "name": "Input",
+    "maps": [
+        {
+            "name": "Touch",
+            "id": "3ee16671-dceb-443c-8a64-ae699ac7eb6b",
+            "actions": [
+                {
+                    "name": "PickUp",
+                    "type": "Value",
+                    "id": "e58227a4-7304-417f-a0ac-00b65125ddfb",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "195ad2fd-238b-412e-80c5-fcdf4f6ea037",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "TouchScreen",
+                    "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "TouchScreen",
+            "bindingGroup": "TouchScreen",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
