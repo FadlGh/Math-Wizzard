@@ -13,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ScreenPressed",
+                    "type": "Button",
+                    "id": "b44fae86-4dc3-49dd-95a9-a301bf686cef",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -24,6 +33,17 @@
                     "processors": "",
                     "groups": "TouchScreen",
                     "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a59e1ae4-59d8-4a99-b0e9-6c89db759d8a",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "Hold(duration=1000)",
+                    "processors": "",
+                    "groups": "TouchScreen",
+                    "action": "ScreenPressed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

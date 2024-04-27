@@ -1,42 +1,84 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(TouchManager))]
 public class PickUp : MonoBehaviour
 {
     #region Variables
+    // For carrying objects
     private GameObject carriedObject;
+    private bool carrying;
+
+    // For ray casting
     private float rayDistance = 5;
     private int layerIndex;
+
+    // To get finger position
+    private bool fingerPressed = false;
+    private Vector2 fingerPosition;
+
+    private TouchManager touchManagerScript;
     #endregion
 
+    #region Start and Update
     private void Start()
     {
+        touchManagerScript = GetComponent<TouchManager>();
         layerIndex = LayerMask.NameToLayer("Carriable");
     }
-    private void OnEnable()
+    private void Update()
     {
-        TouchManager.FingerPosition += MoveObject;
+        if (carrying)
+        {
+            fingerPosition = touchManagerScript.TouchPosition;
+            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(fingerPosition);
+            carriedObject.transform.position = worldPosition;
+        }
     }
+    #endregion
 
-    private void OnDisable()
+    #region Methods when Pressing and Releasing
+    private void CheckPress(Vector2 touchPosition)
     {
-        TouchManager.FingerPosition -= MoveObject;
-    }
+        // Get position of where player pressed
+        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
 
-    private void MoveObject(Vector2 position)
-    {
-        RaycastHit2D hitInfo = Physics2D.Raycast(position, Vector3.forward, rayDistance);
+        // Check if there is anything to carry
+        RaycastHit2D hitInfo = Physics2D.Raycast(worldPosition, Vector3.forward, rayDistance);
+
         if (hitInfo.collider != null && hitInfo.collider.gameObject.layer == layerIndex)
         {
             carriedObject = hitInfo.collider.gameObject;
             carriedObject.GetComponent<Rigidbody2D>().isKinematic = true;
+            carrying = true;
         }
         else
         {
             return;
         }
-
-        carriedObject.transform.position = position;
     }
+
+    private void CheckRemoval()
+    {
+        if (carrying)
+        {
+            carriedObject.GetComponent<Rigidbody2D>().isKinematic = false;
+            carriedObject = null;
+            carrying = false;
+        }
+    }
+    #endregion
+
+    #region OnEnable and OnDisable
+    private void OnEnable()
+    {
+        TouchManager.FingerPressed += CheckPress;
+        TouchManager.FingerReleased += CheckRemoval;
+    }
+
+    private void OnDisable()
+    {
+        TouchManager.FingerPressed -= CheckPress;
+        TouchManager.FingerReleased -= CheckRemoval;
+    }
+    #endregion
 }

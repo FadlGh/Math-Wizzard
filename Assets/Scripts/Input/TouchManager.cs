@@ -1,54 +1,80 @@
 using System;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class TouchManager : MonoBehaviour
 {
     #region Variables
-    private PlayerInput playerInput;
-    private InputAction touchPress;
 
-    public static event Action<Vector2> FingerPosition;
+    // Components and actions that handle input
+    private PlayerInput playerInput;
+    private InputAction touchPositionAction;
+    private InputAction touchPressed;
+
+    // when to get location of finger on screen and its value
+    private bool getposition;
+    private Vector2 _touchPosition;
+
+    // Information to send to PickUp script
+    public static event Action<Vector2> FingerPressed;
+    public static event Action FingerReleased;
     #endregion
 
+    #region Getters and Setters
+    public Vector2 TouchPosition
+    {
+        get
+        {
+            return _touchPosition;
+        }
+    }
+    #endregion
+
+    #region Awake and Update
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        touchPress = playerInput.actions["PickUp"];
+        touchPositionAction = playerInput.actions["PickUp"];
+        touchPressed = playerInput.actions["ScreenPressed"];
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        touchPress.performed += Pressed;
-        touchPress.canceled += Removed;
+        if (getposition)
+        {
+            _touchPosition = touchPositionAction.ReadValue<Vector2>();
+        }
     }
+    #endregion
 
-    private void OnDisable()
-    {
-        touchPress.performed -= Pressed;
-        touchPress.canceled -= Removed;
-    }
-
+    #region Methods for Input Logic
     private void Pressed(InputAction.CallbackContext context)
     {
-        Debug.Log("Pressed");
-        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>());
-        FingerPosition?.Invoke(worldPosition);
+        getposition = true;
+        FingerPressed?.Invoke(touchPositionAction.ReadValue<Vector2>());
     }
 
     private void Removed(InputAction.CallbackContext context)
     {
-        Debug.Log("Removed");
+        getposition = false;
+        FingerReleased?.Invoke();
+    }
+    #endregion
+
+    #region OnEnable and OnDisable
+    private void OnEnable()
+    {
+        touchPressed.started += Pressed;
+        touchPressed.performed += Removed;
+        touchPressed.canceled += Removed;
     }
 
-    private void PressedTest(InputAction.CallbackContext context)
+    private void OnDisable()
     {
-        Debug.Log("Pressed Test");
+        touchPressed.started -= Pressed;
+        touchPressed.performed -= Removed;
+        touchPressed.canceled -= Removed;
     }
-
-    private void RemovedTest(InputAction.CallbackContext context)
-    {
-        Debug.Log("Removed Test");
-    }
+    #endregion
 }
