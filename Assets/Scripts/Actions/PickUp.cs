@@ -10,7 +10,7 @@ public class PickUp : MonoBehaviour
 
     // For ray casting
     private float rayDistance = 5;
-    private int layerIndex;
+    private int cariableLayerIndex;
 
     // To get finger position
     private bool fingerPressed = false;
@@ -23,7 +23,7 @@ public class PickUp : MonoBehaviour
     private void Start()
     {
         touchManagerScript = GetComponent<TouchManager>();
-        layerIndex = LayerMask.NameToLayer("Carriable");
+        cariableLayerIndex = LayerMask.NameToLayer("Carriable");
     }
     private void Update()
     {
@@ -45,7 +45,7 @@ public class PickUp : MonoBehaviour
         // Check if there is anything to carry
         RaycastHit2D hitInfo = Physics2D.Raycast(worldPosition, Vector3.forward, rayDistance);
 
-        if (hitInfo.collider != null && hitInfo.collider.gameObject.layer == layerIndex)
+        if (hitInfo.collider != null && hitInfo.collider.gameObject.layer == cariableLayerIndex)
         {
             carriedObject = hitInfo.collider.gameObject;
             carriedObject.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -66,6 +66,7 @@ public class PickUp : MonoBehaviour
             carrying = false;
         }
     }
+
     #endregion
 
     #region OnEnable and OnDisable

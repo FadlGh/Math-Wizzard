@@ -6,13 +6,13 @@ public class PotionGenerator : MonoBehaviour
 {
     [SerializeField] private int answer;
 
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
