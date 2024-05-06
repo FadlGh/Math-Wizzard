@@ -11,19 +11,16 @@ public class Potion : MonoBehaviour
 
     private void Start()
     {
-        //text.text = value.ToString();
+        text.text = value.ToString();
     }
 
     private void Update()
     {
         Collider2D[] stickColliders = Physics2D.OverlapCircleAll(transform.position, 1f, stickLayerIndex);
-        print(stickLayerIndex.value);
-        if (stickColliders.Length > 0)
-        {
-            transform.position = stickColliders[0].transform.position;
-            print(stickColliders[0].transform.position);
-            print("true");
-        }
+
+        if (stickColliders.Length < 1) return;
+
+        transform.position = stickColliders[0].transform.position;
     }
 
     private void OnDrawGizmos()

@@ -4,9 +4,11 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
     #region Variables
+    public static PickUp instance;
+
     // For carrying objects
     private GameObject carriedObject;
-    private bool carrying;
+    public bool carrying;
 
     // For ray casting
     private float rayDistance = 5;
@@ -22,6 +24,7 @@ public class PickUp : MonoBehaviour
     #region Start and Update
     private void Start()
     {
+        instance = this;
         touchManagerScript = GetComponent<TouchManager>();
         cariableLayerIndex = LayerMask.NameToLayer("Carriable");
     }
