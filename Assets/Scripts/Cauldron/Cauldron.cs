@@ -44,7 +44,7 @@ public class Cauldron : MonoBehaviour
 
     private bool CanPerform()
     {
-        return child1.value > 0 && child2.value > 0;
+        return child1.value >= 0 && child2.value >= 0;
     }
 
     public void Perform()
