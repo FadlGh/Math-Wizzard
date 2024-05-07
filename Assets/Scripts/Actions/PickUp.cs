@@ -15,7 +15,6 @@ public class PickUp : MonoBehaviour
     private int cariableLayerIndex;
 
     // To get finger position
-    private bool fingerPressed = false;
     private Vector2 fingerPosition;
 
     private TouchManager touchManagerScript;
